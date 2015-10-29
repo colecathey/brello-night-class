@@ -18,21 +18,16 @@ namespace Brello.Tests.Models
         public void CardEnsurePropertiesWork()
         {
             Color color = new Color { Name = "Blue", Value = "#0000ff" };
-<<<<<<< HEAD
+
             //Object Initializer syntax
             Card c = new Card { Title = "My Card", Description = "A description of my card", BorderColor = color };
-=======
-            // Object Initializer syntax
-            Card c = new Card { Title = "My Card", Description = "A description of my card", BorderColor = color};
-            // Otherwise you'd have to
->>>>>>> refs/remotes/jcockhren/master
+
+      
+
             Assert.AreEqual("My Card", c.Title);
             Assert.AreEqual("A description of my card", c.Description);
             Assert.AreEqual("Blue", c.BorderColor.Name);
         }
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/jcockhren/master
 }
