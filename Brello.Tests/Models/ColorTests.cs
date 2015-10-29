@@ -13,12 +13,15 @@ namespace Brello.Tests.Models
             Color c = new Color();
             Assert.IsNotNull(c);
         }
+
+
         [TestMethod]
         public void ColorEnsurePropertiesWork()
         {
-            //Object Initializer syntax
-            Color c = new Color { Name = "Blue", Value = "#0000ff" };
-            // otherwise you would have to 
+            // Object Initializer syntax
+            Color c = new Color {Name = "Blue", Value = "#0000ff"};
+            // Otherwise you'd have to
+
             /*
             Color c = new Color();
             c.Name = "Blue";
@@ -27,13 +30,27 @@ namespace Brello.Tests.Models
             Assert.AreEqual("Blue", c.Name);
             Assert.AreEqual("#0000ff", c.Value);
         }
+
+        
+
         [TestMethod]
-        public void ColorEnsureColorsAreEqual()
+        public void ColorEnsureColorsAreNotEqual()
         {
             Color color1 = new Color { Name = "Blue", Value = "#0000ff" };
-            Color color2 = new Color { Name = "Blue", Value = "#0000ff" };
-            Assert.AreEqual(0, color1.CompareTo(color2));
-            Assert.IsTrue(color1 == color2);
+            Color color2 = new Color { Name = "Red", Value = "#ff0000" };
+            Assert.IsTrue(0 != color1.CompareTo(color2));
+            Assert.IsTrue(color1 != color2);
+        }
+
+      
+
+        [TestMethod]
+        public void ColorEnsureLessThanComparison()
+        {
+            Color color1 = new Color { Name = "Blue", Value = "#0000ff" };
+            Color color2 = new Color { Name = "Red", Value = "#ff0000" };
+            Assert.AreEqual(-1, color1.CompareTo(color2));
+            Assert.IsTrue(color1 < color2);
 
         }
     }
