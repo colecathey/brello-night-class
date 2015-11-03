@@ -32,7 +32,8 @@ namespace Brello.Models
 
         public Board CreateBoard(string title, ApplicationUser owner)
         {
-            Board my_board = new Board { Title = title };
+            Board my_board = new Board { Title = title, Owner = owner };
+            context.Boards.Add(my_board);
             context.SaveChanges(); //this saves something to the database
 
             return my_board;

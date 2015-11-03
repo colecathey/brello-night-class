@@ -9,6 +9,7 @@ namespace Brello.Models
     {
         public int BoardId { get; set; }
         public string Title { get; set; }
+        public ApplicationUser Owner { get; set; }
 
         //changed from ICollection to List
         public virtual List<BrelloList> Lists { get; set; }
