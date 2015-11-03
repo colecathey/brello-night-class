@@ -6,10 +6,10 @@ using System.Data.Entity;
 
 namespace Brello.Models
 {
-    public class BoardService
+    public class BoardRepository
     {
         private BoardContext context;
-        public BoardService(BoardContext _context) {
+        public BoardRepository(BoardContext _context) {
             context = _context;
         }
 
@@ -28,6 +28,14 @@ namespace Brello.Models
         public List<BrelloList> GetAllLists(Board _board)
         {
             return null;
+        }
+
+        public Board CreateBoard(string title, ApplicationUser owner)
+        {
+            Board my_board = new Board { Title = title };
+            context.SaveChanges(); //this saves something to the database
+
+            return my_board;
         }
     }
 }
