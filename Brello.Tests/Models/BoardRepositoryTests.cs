@@ -79,12 +79,26 @@ namespace Brello.Tests.Models
         public void BoardRepositoryCanGetBoardCount()
         {
             /* begin arrange */
+            var mock_boards = new Mock<DbSet<Board>>();
+            mock_boards.Object.Add(new Board { Title = "My Awesome Board", Owner = new ApplicationUser() });
+            
+            var data = mock_boards.Object.AsQueryable();
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+            mock_context.Object.SaveChanges(); // This saves something to the Database
+            BoardRepository board_repository = new BoardRepository(mock_context.Object);
             /* end arrange */
 
             /* begin act */
+            int actual = board_repository.GetBoardCount();
             /* end act */
 
             /* begin assert */
+            Assert.AreEqual(1, actual);
             /* end assert */
         }
 

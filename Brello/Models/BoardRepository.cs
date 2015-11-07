@@ -43,5 +43,10 @@ namespace Brello.Models
         {
             return context.Boards.ToList();
         }
+
+        public int GetBoardCount()
+        {
+            return context.Boards.ToList().Count();
+        }
     }
 }
