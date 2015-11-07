@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Brello.Models;
 using Moq;
 using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace Brello.Tests.Models
 {
@@ -81,6 +82,20 @@ namespace Brello.Tests.Models
             mock_boards.Verify(m => m.Add(It.IsAny<Board>()));
             mock_context.Verify(x => x.SaveChanges(), Times.Once());
         }
-        
+
+        [TestMethod]
+        public void BoardRepositoryEnsureICanGetAllBoards()
+        {
+            var mock_context = new Mock<BoardContext>();
+            var mock_boards = new Mock<DbSet<Board>>();
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            ApplicationUser owner = new ApplicationUser();
+            board_repo.CreateBoard("My Awesome Board", owner);
+            board_repo.CreateBoard("My Other Awesome Board", owner);
+
+            List<Board> boards = board_repo.GetAllBoards();
+            Assert.AreEqual(2, boards.Count);
+        }
     }
 }
