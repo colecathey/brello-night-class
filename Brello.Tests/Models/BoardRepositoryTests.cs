@@ -108,10 +108,11 @@ namespace Brello.Tests.Models
 
             /* Begin Act */
             my_list.Add(new Board { Title = "My Awesome Board" });
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
             /* End Act */
 
             /* Begin Assert */
-            Assert.AreEqual(1, actual);
+            Assert.AreEqual(1, board_repository.GetBoardCount());
             /* End Assert */
         }
 
@@ -129,6 +130,9 @@ namespace Brello.Tests.Models
             mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
             mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
             mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+            
+            // this allows Board Repository to call Boards.Add and have it update the my_list instance and Enumerator
+            mock_boards.Setup(m => m.Add(It.IsAny<Board>())).Callback((Board b) => my_list.Add(b));
 
             mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
 
@@ -139,6 +143,9 @@ namespace Brello.Tests.Models
 
             /* Begin Act */
             Board added_board = board_repo.CreateBoard(title, owner);
+            //mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(my_list.GetEnumerator());
+
+            
             /* End Act */
 
             /* Begin Assert */
