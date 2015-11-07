@@ -78,6 +78,7 @@ namespace Brello.Tests.Models
         [TestMethod]
         public void BoardRepositoryCanCreateBoard()
         {
+            /* begin arrange */
             var mock_boards = new Mock<DbSet<Board>>();
             // One way to call an object underneath a mock.
             //mock_context.Object.Boards
@@ -87,17 +88,24 @@ namespace Brello.Tests.Models
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
             string title = "My Awesome Board";
             ApplicationUser owner = new ApplicationUser();
-            Board added_board = board_repo.CreateBoard(title, owner);
-            Assert.IsNotNull(added_board);
+            /* end arrang */
 
+            /* begin act */
+            Board added_board = board_repo.CreateBoard(title, owner);
+            /* end act */
+
+            /* being assert */
+            Assert.IsNotNull(added_board);
             mock_boards.Verify(m => m.Add(It.IsAny<Board>()));
             mock_context.Verify(x => x.SaveChanges(), Times.Once());
             Assert.AreEqual(1, mock_context.Object.Boards.CountAsync());
+            /* end assert */
         }
 
         [TestMethod]
         public void BoardRepositoryEnsureICanGetAllBoards()
         {
+            /* begin arrange */
             var mock_boards = new Mock<DbSet<Board>>();
 
             ApplicationUser owner = new ApplicationUser();
@@ -120,9 +128,15 @@ namespace Brello.Tests.Models
             mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
 
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            /* end arrange */
 
+            /* Begin Act*/
             List<Board> boards = board_repo.GetAllBoards();
+            /* end act */
+
+            /*begin assert*/
             Assert.AreEqual(2, boards.Count);
+            /* end assert */
         }
         
     }
