@@ -47,26 +47,118 @@ namespace Brello.Tests.Models
         }
 
         [TestMethod]
-        public void BoardRepositoryEnsureThereAreZeroLists()
+        public void BoardRepositoryEnsureICanGetAllLists()
         {
-            BoardRepository board_repo = new BoardRepository(mock_context.Object);
-            
-            int expected = 0;
-            int actual = board_repo.GetAllLists().Count;
+            /* Begin Arrange */
+            var mock_boards = new Mock<DbSet<Board>>();
+            ApplicationUser user1 = new ApplicationUser();
+            ApplicationUser user2 = new ApplicationUser();
+            var brello_lists = new List<BrelloList>
+            {
+                new BrelloList { Title = "My List", BrelloListId = 1 }
+            };
+            var my_list = new List<Board>()
+            {
+                new Board { Title = "Tim's Board", Owner = user1, BoardId = 1, Lists = brello_lists },
+                new Board { Title = "Sally's Board", Owner = user2, BoardId = 2, Lists = brello_lists }
+            }; 
+
+            var data = my_list.AsQueryable();
+
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);           
+            BoardRepository board_repository = new BoardRepository(mock_context.Object);
+            /* End Arrange */
+
+            /* Begin Act */
+            int expected = 2;
+            int actual = board_repository.GetAllLists().Count;
+            /* End Act */
+
+            /* Begin Assert */
             Assert.AreEqual(expected, actual);
-            
+            /* End Assert */
         }
+
+        //[TestMethod]
+        //public void BoardRepositoryEnsureThereAreZeroLists()
+        //{
+        //    BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            
+        //    int expected = 0;
+        //    int actual = board_repo.GetAllLists().Count;
+        //    Assert.AreEqual(expected, actual);
+            
+        //}
 
         // These tests are telling us to start looking at
         // How to define CRUD operations for Boards
         // Why? Because a List cannot exists without a Board
+
+        [TestMethod]
+        public void BoardRepositoryEnsureThereAreZeroLists()
+        {
+            var mock_boards = new Mock<DbSet<Board>>();
+            ApplicationUser user1 = new ApplicationUser();
+            ApplicationUser user2 = new ApplicationUser();
+
+            var my_list = new List<Board>()
+            {
+                new Board { Title = "Tim's Board", Owner = user1, BoardId = 1, Lists = brello_lists },
+                new Board { Title = "Sally's Board", Owner = user2, BoardId = 2, Lists = brello_lists }
+            };
+
+            var data = my_list.AsQueryable();
+
+            //mock_boards.Object.Add(new Board { Title = "My Awesome Board", Owner = new ApplicationUser() });
+
+            //var data = mock_boards.Object.AsQueryable();
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+            BoardRepository board_repo = new BoardRepository(mock_context.Object);
+            /* end arrange */
+
+            int expected = 0;
+            int actual = board_repo.GetListCount();
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestMethod]
         public void BoardRepositoryEnsureABoardHasZeroLists()
         {
+            /* Begin Arrange */
+            var mock_boards = new Mock<DbSet<Board>>();
+            ApplicationUser user1 = new ApplicationUser();
+            
+            var my_list = new List<Board>()
+            {
+                new Board { Title = "Tim's Board", Owner = user1, BoardId = 1 },                
+            };
+
+            var data = my_list.AsQueryable();
+
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Provider).Returns(data.Provider);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mock_boards.As<IQueryable<Board>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            mock_context.Setup(m => m.Boards).Returns(mock_boards.Object);
+            BoardRepository board_repository = new BoardRepository(mock_context.Object);
+            /* End Arrange */
+
             BoardRepository board_repo = new BoardRepository(mock_context.Object);
-            Board board = new Board();
+
             int expected = 0;
-            Assert.AreEqual(expected, board_repo.GetAllLists(board).Count);
+            Assert.AreEqual(expected, board_repo.GetAllLists(1).Count());
+            
         }
 
         [TestMethod]
