@@ -21,13 +21,15 @@ namespace Brello.Models
 
         public List<BrelloList> GetAllLists()
         {
-            return null;
+            var query = from l in context.Boards select l;
+            return query.SelectMany(board => board.Lists).ToList();
         }
 
         // This is an example of overloading a method
-        public List<BrelloList> GetAllLists(Board _board)
+        public List<BrelloList> GetAllLists(int _board_id)
         {
-            return null;
+            var query = from b in context.Boards where b.BoardId == _board_id select b.Lists;
+            return query.Single<List<BrelloList>>();
         }
 
         public Board CreateBoard(string title, ApplicationUser owner)
@@ -50,6 +52,17 @@ namespace Brello.Models
             // Same As -> context.Boards.ToList().Count
             
             return query.Count();
+        }
+
+        public List<Board> GetBoards(ApplicationUser user1)
+        {
+            var query = from b in context.Boards where b.Owner == user1 select b;
+            return query.ToList<Board>(); // Same as query.ToList();
+        }
+
+        public int GetListCount()
+        {
+            return GetAllLists().Count;
         }
     }
 }
