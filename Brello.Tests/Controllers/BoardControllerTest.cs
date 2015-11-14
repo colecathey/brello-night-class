@@ -41,5 +41,16 @@ namespace Brello.Tests.Controllers
             string expected_message = "My Boards";
             Assert.AreEqual(expected_message, result.ViewBag.Message);
         }
+
+        [TestMethod]
+        public void BoardControllerEnsureListOfUserBoards()
+        {
+            // Arrange
+            BoardController controller = new BoardController();
+            // Act
+            ViewResult result = controller.Index() as ViewResult;
+            // Assert
+            
+        }
     }
 }

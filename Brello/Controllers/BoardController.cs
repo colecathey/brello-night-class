@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Brello.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +9,22 @@ namespace Brello.Controllers
 {
     public class BoardController : Controller
     {
+
+        private BoardRepository repository;
+
+        public BoardController()
+        {
+            //repository = new BoardRepository();
+        }
         // GET: Board
         public ActionResult Index()
         {
             ViewBag.Message = "My Boards";
+            var things = new List<string>();
+            things.Add("foo");
+            things.Add("bar");
+
+            ViewBag.Things = things;
             return View("Index");
         }
 
