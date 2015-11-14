@@ -3,4 +3,8 @@
 }
 
     <h1>@ViewBag.Message</h1>
-    
+    @using (@Html.BeginForm("Create", "Board", FormMethod.Post, htmlAttributes: new { style = "display:block;", @class = "mystyle" }))
+    {
+        @Html.TextBox("name");
+        @Html.
+    }
