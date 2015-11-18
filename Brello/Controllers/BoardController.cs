@@ -10,7 +10,7 @@ namespace Brello.Controllers
     public class BoardController : Controller
     {
         private BoardRepository repository;
-        private Mock<>
+        //private Mock<>
 
         public BoardController()
         {
@@ -25,6 +25,7 @@ namespace Brello.Controllers
         // GET: Board
         public ActionResult Index()
         {
+            ViewBag.Boards = repository.GetAllBoards();
             ViewBag.Message = "My Boards";
 
             var things = new List<string>();
