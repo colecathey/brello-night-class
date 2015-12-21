@@ -80,14 +80,13 @@ namespace Brello.Controllers
 
         }
 
-        // POST: Board/Create
+        // POST: Board/CreateCard
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult CreateCard(FormCollection collection)
         {
             try
             {
-                // TODO: Add insert logic here
-
+                string listId = collection.GetValue("list-id").AttemptedValue;
                 return RedirectToAction("Index");
             }
             catch

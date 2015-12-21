@@ -1,9 +1,28 @@
 ﻿@model IEnumerable<Brello.Models.BrelloList>
 
 @{
-
         Layout = "~/Views/Shared/_BrelloLayout.cshtml";
 }
+
+<div id="card-modal" role="dialog" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("CreateCard", "Board", FormMethod.Post, new { id = "card-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("board-id", ViewBag.CurrentBoardId as object)
+                <div class="modal-header">Add New Card to List {{listId}}</div>
+                <div class="modal-body">
+                    <input type="hidden" value="" id="list-id" name="list-id"/>
+                    @Html.TextBox("card-name")
+                    @Html.TextArea("card-description")
+                </div>
+                <div class="modal-footer"><input class="btn" type="submit" value="Submit" /></div>
+            }
+        </div>
+    </div>
+</div>
+
 <div id="board" class="green container-fluid">
     <div class="row" style="display:inline-flex;">
         @foreach (var item in Model)
@@ -15,7 +34,11 @@
 
                     </ul>
                 </div>
-                <div class="brellolist-footer"></div>
+                <div  class="brellolist-footer" ng-controller="BoardController">
+                    <div style="display:none" id=@item.BrelloListId></div>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#card-modal" my-data=@item.BrelloListId ng-click="getListId($event)">Add A Card to List @item.BrelloListId</button>
+                
+                </div>
             </div>
         }
         <div class="brellolist-wrapper">
